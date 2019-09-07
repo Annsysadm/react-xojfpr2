@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import {connect} from 'react-redux';
+import { personsFetchData } from '../actions/persons';
 
 class App extends Component{
+/*вызываем функцию, которая будет вызывать данные из базы данных*/
+
+  componentDidMount() {
+    this.props.fetchData('api/muggers'); //адрес сайта, указанный в файле api
+  }
+
   render(){
     return (
       <div>
@@ -14,12 +21,16 @@ class App extends Component{
   }
 }
 
-/* связываем компонент со стором*/
+/* связываем компонент со стором. передаем данные в стор для дальнейшего исполльзования*/
 const mapStateToProps = state => {
-  return{};
+  return{
+    persons: state.persons
+  };
 };
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    fetchData: url => dispatch(personsFetchData(url ))
+  };
 };
 
 
