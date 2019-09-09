@@ -34,6 +34,7 @@ export class MoviesList extends Component {
                   <img src={'https://image.tmdb.org/t/p/w185'+item.poster_path} />
                   <p  className='title'>{item.title}</p>
                   <p>&#11089; {item.vote_average}</p>
+                  <p  className='movie_id'>{item.genres}</p>
                   </div>
               ))}
           </div>

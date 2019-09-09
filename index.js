@@ -14,9 +14,9 @@ export const store = configureStore();
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      name: 'Anna',
-    };
+    // this.state = {
+    //   name: 'Anna',
+    // };
   };
 
   render() {
@@ -30,7 +30,7 @@ class App extends Component {
                 <Link to="/">The TOP Movies</Link>
               </li>
               <li>
-                <Link to="/compare/">Who's best?</Link>
+                <Link to="/compare/">Who's the best?</Link>
               </li>
               <li>
                 <Link to="/about/">Call me</Link>
