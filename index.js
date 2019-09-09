@@ -1,45 +1,51 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { render } from 'react-dom';
-import Hello from './Hello';
-import './style.css';
-import App from './containers/App';
-import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './reducers/rootReducer';
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 
-const store = createStore( 
-  rootReducer,
-  composeWithDevTools(applyMiddleware(thunk)) 
-  /* создали стор, applyMiddleware позволяет использовать асинхронные действия, 
-  оборачиваем в composeWithDevTools чтобы потом смотреть как меняются данные в разные промежутки времени */
+import { About } from './About';
+import { Compare } from './Compare';
+import './style.css';
+import configureStore from './Store/config.js';
+import MoviesList  from './MoviesList';
 
-)
+export const store = configureStore();
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      name: 'React'
+      name: 'Anna',
     };
-  }
+  };
 
   render() {
     return (
-      <div>
-        <Hello name={this.state.name} />
-        <p>
-          Start editing to see some magic happen :)
-        </p>
-      </div>
+      <Provider store={store}>
+      <Router>
+        <div>
+          <nav>
+            <ul className="nav">
+              <li>
+                <Link to="/">The TOP Movies</Link>
+              </li>
+              <li>
+                <Link to="/compare/">Who's best?</Link>
+              </li>
+              <li>
+                <Link to="/about/">Call me</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <Route path="/" exact component={MoviesList} />
+          <Route path="/compare/" component={Compare} />
+          <Route path="/about/" component={About} />
+        </div>
+      </Router>
+      </Provider>
     );
   }
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>, document.getElementById('root'));
-// serviceWorker.unregister();
+render(<App />, document.getElementById('root'));
