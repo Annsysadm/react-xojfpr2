@@ -1,46 +1,43 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { URL_DETAIL, API_KEY } from "../const";
-import DetailMovieCard from './DetailMovieCard';
-import Search from './Search';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { itemsFetchData } from './actions/items';
+import { store } from './index'
 
-/* eslint-disable */
+export class MovieDetails extends Component {
+    componentDidMount() {
+        store.dispatch(itemsFetchData('https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=c6eced5dc2b9edf40aeda80766678f82'));
+    }
 
-class MovieDetails extends Component {
+    render() {
+        if (this.props.hasError) {
+            return <p>Error has happened</p>;
+        }
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			movieData: { }
-		};
-	}
-	componentDidMount() {
-			
-		const { id } = this.props.match.params;
-	
-		axios
-			.get(
-				`${URL_DETAIL}${id}${API_KEY}&language=en-US&page=1`
-			)
-			.then(response => {
-				this.setState({ movieData: response.data });
-			});
-	
-	}
-	render() {
-
-		let movieData ;
-		if ( (typeof this.state.movieData !== 'undefined') || !(this.state.movieData.isEmpty()) ) {
-			movieData = <DetailMovieCard movie={this.state.movieData} />
-
-		} else {
-			movieData = <div> Loading !</div>
-		}
-
-
-		return <div className= "movie-container"> <Search/>{movieData}</div>;
-	
-// TO DO CHECK HOW TO PASS ALL THESE PROPERTIES TO MovieCard component
-	}
+        if (this.props.isLoading) {
+            return <p>Loading…</p>;
+        }
+        return (
+          <div className="container movies">
+                <h1>Movie Details</h1>
+                <input class="in2" type="text" />
+                <button class="compare" onClick={this.compareMovies}> Show</button>
+          </div>
+        )
+    }
 }
-export default MovieDetails;
+
+const mapStateToProps = (state) => {
+    return {
+        items: state.items,
+        hasError: state.itemsHasError,
+        isLoading: state.itemsIsLoading
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchData: (url) => dispatch(itemsFetchData(url))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetails);
